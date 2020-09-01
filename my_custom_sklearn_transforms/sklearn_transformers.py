@@ -47,4 +47,4 @@ class DataSetBalancer( BaseEstimator , TransformerMixin ):
         target = ["PROFILE"]
         
         # Devolvemos un nuevo array equilibrado
-        return np.array( [ aux_df[features] , aux_df[target] ] ).reshape(-1,1)
+        return [ aux_df[features] , aux_df[target] ]
