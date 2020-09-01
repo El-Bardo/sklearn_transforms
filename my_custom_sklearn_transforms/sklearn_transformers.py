@@ -46,4 +46,4 @@ class DataSetBalancer( BaseEstimator , TransformerMixin ):
         target = ["PROFILE"]
         
         # Devolvemos un nuevo dataframe equilibrado
-        return aux_df[features] , aux_df[target]
+        return aux_df[features] , aux_df[target].values.ravel()
