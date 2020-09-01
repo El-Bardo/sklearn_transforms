@@ -25,8 +25,8 @@ class DropColumns(BaseEstimator, TransformerMixin):
 
 class DataSetBalancer( BaseEstimator , TransformerMixin ):
     
-    def __init__( self , X , y ):
-        self.X = pd.concat( [ X , y ] , axis = 1 )
+    def __init__( self , X ):
+        self.X = X
     
     def fit( self , X , y = None ):
         return self
@@ -34,16 +34,10 @@ class DataSetBalancer( BaseEstimator , TransformerMixin ):
     def transform( self , X ):
         
         # Determinamos la clase con mayor cantidad de registros
-        minimum = min( len( self.X['PROFILE'][ self.X['PROFILE'] == 'advanced_data_science' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'beginner_front_end' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'beginner_data_science' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'advanced_backend' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'advanced_front_end' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'beginner_backend' ] ) )
+        n = min( len( self.X['PROFILE'][ self.X['PROFILE'] == 'advanced_data_science' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'beginner_front_end' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'beginner_data_science' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'advanced_backend' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'advanced_front_end' ] ) , len( self.X['PROFILE'][ self.X['PROFILE'] == 'beginner_backend' ] ) )
  
         # Igualamos la cardinalidad del conjunto muestra de cada registro
-        aux_df = pd.concat( [ resample( self.X[ self.X['PROFILE'] == 'advanced_data_science' ] , replace = True , n_samples = minimum , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'beginner_front_end' ] , replace = True , n_samples = minimum , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'beginner_data_science' ] , replace = True , n_samples = minimum , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'advanced_backend' ] , replace = True , n_samples = minimum , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'advanced_front_end' ] , replace = True , n_samples = minimum , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'beginner_backend' ] , replace = True , n_samples = minimum , random_state = 100 ) ] )
+        aux_df = pd.concat( [ resample( self.X[ self.X['PROFILE'] == 'advanced_data_science' ] , replace = True , n_samples = n , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'beginner_front_end' ] , replace = True , n_samples = n , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'beginner_data_science' ] , replace = True , n_samples = n , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'advanced_backend' ] , replace = True , n_samples = n , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'advanced_front_end' ] , replace = True , n_samples = n , random_state = 100 ) , resample( self.X[ self.X['PROFILE'] == 'beginner_backend' ] , replace = True , n_samples = n , random_state = 100 ) ] )
         
-        # Retomo de columnas que seran features
-        features = ["Unnamed: 0", "NAME", "USER_ID", "HOURS_DATASCIENCE", "HOURS_BACKEND", "HOURS_FRONTEND","NUM_COURSES_BEGINNER_DATASCIENCE", "NUM_COURSES_BEGINNER_BACKEND", "NUM_COURSES_BEGINNER_FRONTEND","NUM_COURSES_ADVANCED_DATASCIENCE", "NUM_COURSES_ADVANCED_BACKEND", "NUM_COURSES_ADVANCED_FRONTEND","AVG_SCORE_DATASCIENCE", "AVG_SCORE_BACKEND", "AVG_SCORE_FRONTEND"]
-
-        # Retomo de variable objetico
-        target = ["PROFILE"]
-
         # Devolvemos un nuevo dataframe equilibrado
-        return aux_df[features] , aux_df[target]
+        return aux_df
