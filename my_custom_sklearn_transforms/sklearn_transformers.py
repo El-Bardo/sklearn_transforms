@@ -47,4 +47,4 @@ class DataSetBalancer( BaseEstimator , TransformerMixin ):
         target = ["PROFILE"]
         
         # Devolvemos un nuevo array equilibrado
-        return [ aux_df[features] , aux_df[target] ]
+        return aux_df[features] , aux_df[target]
